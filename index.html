@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!-- Tienda generada con Harvys, asistente de e-commerce creado por el Profesor Harvey Sanabria -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RELIQUE — [POR COMPLETAR]</title>
+<meta name="description" content="Prendas de archivo reinterpretadas, inspiradas en piezas icónicas de la moda, con bolsillos ocultos y ergonómicos para llevar tus objetos personales sin depender de un bolso. Marca en etapa de desarrollo.">
+<meta name="generator" content="Harvys — asistente de e-commerce del Profesor Harvey Sanabria">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="anim-baja tarj-planas modo-claro">
+
+<!-- MODAL PAGO -->
+<div class="modal-overlay" id="modal-pago" onclick="modalClickFuera(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head"><h3>Confirmar pago</h3><button class="modal-cerrar" onclick="cerrarModal()" aria-label="Cerrar">✕</button></div>
+    <div class="modal-body">
+      <div class="modal-total"><span class="tl">Total a pagar</span><span class="tm" id="modal-total-monto">$0</span></div>
+      <div class="pago-metodos" id="pago-metodos"></div>
+      <div class="pago-datos" id="pago-datos">
+        <div class="pd-label">Transferir a este número</div>
+        <div class="pd-numero" id="pd-numero"></div>
+        <div class="pd-nombre" id="pd-nombre"></div>
+        <button class="btn-copiar" onclick="copiarNumero()">📋 Copiar número</button>
+      </div>
+      <div class="pasos">
+        <div class="paso"><div class="paso-num">1</div><div class="paso-txt" id="paso-1"></div></div>
+        <div class="paso"><div class="paso-num">2</div><div class="paso-txt">Toca <strong>"Confirmar y enviar"</strong> — se abre WhatsApp con tu pedido</div></div>
+        <div class="paso"><div class="paso-num">3</div><div class="paso-txt" id="paso-3"></div></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <a href="#" target="_blank" rel="noopener" class="btn-wsp" onclick="return prepararWsp(this)">✅ Confirmar y enviar por WhatsApp</a>
+      <button class="btn-seguir" onclick="cerrarModal()">← Seguir comprando</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="cerrarCarrito()"></div>
+
+<!-- VISOR DE FOTOS -->
+<div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Foto del producto">
+  <figure class="visor-caja">
+    <button class="visor-cerrar" aria-label="Cerrar">✕</button>
+    <div class="visor-foto" id="visor-foto"><img id="visor-img" alt=""></div>
+    <figcaption><strong id="visor-nombre"></strong><span id="visor-precio"></span></figcaption>
+    <div class="visor-ayuda">Toca o haz clic en la foto para ampliarla más</div>
+  </figure>
+</div>
+
+<button class="carrito-fab" onclick="toggleCarrito()" id="fab" aria-label="Abrir carrito">🛒<span class="carrito-badge" id="badge">0</span></button>
+
+<div class="carrito-panel" id="panel-carrito">
+  <div class="panel-header"><h3>Tu selección RELIQUE</h3><button class="btn-cerrar" onclick="cerrarCarrito()" aria-label="Cerrar carrito">✕</button></div>
+  <ul id="lista-carrito"></ul>
+  <div class="panel-footer">
+    <div class="total-row"><span class="total-lbl">Total</span><span class="total-monto" id="total">$0</span></div>
+    <div class="panel-btns"><button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar</button><button class="btn-pagar" onclick="pagar()">Consultar pedido por WhatsApp</button></div>
+  </div>
+</div>
+
+<!-- ASISTENTE DE LA TIENDA (responde con los datos de esta tienda) -->
+<span class="as-aviso" id="as-aviso">¿Te ayudo? 👋</span>
+<button class="as-burbuja" id="as-burbuja" aria-label="Abrir el asistente de la tienda"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></button>
+<div class="as-panel" id="as-panel" role="dialog" aria-label="Reli">
+  <div class="as-cabecera">
+    <div class="as-avatar"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></div>
+    <div><strong>Reli</strong><small><i></i> En línea</small></div>
+    <button id="as-cerrar" aria-label="Cerrar el asistente">✕</button>
+  </div>
+  <div class="as-mensajes" id="as-mensajes"></div>
+  <div class="as-chips" id="as-chips"></div>
+  <form class="as-form" id="as-form">
+    <input id="as-input" placeholder="Escribe tu pregunta…" autocomplete="off" aria-label="Tu pregunta">
+    <button type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+  </form>
+</div>
+
+<header class="hero hero-dividido">
+  <div class="hero-bg efecto-ninguno"></div>
+  <div class="hero-content">
+    <div>
+      
+      <div class="hero-badge">RELIQUE · Archivo reinterpretado</div>
+      <h1>Diseño con historia.<span>Función para hoy.</span></h1>
+      <p class="hero-sub">Prendas inspiradas en piezas icónicas, reinterpretadas con bolsillos ocultos y ergonómicos. Conoce nuestra propuesta en desarrollo.</p>
+      <a href="#catalogo" class="btn-hero">Explorar las prendas
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="hero-stats"><div class="hero-stat"><div class="num">6</div><div class="lbl">Prendas en el catálogo</div></div><div class="hero-stat"><div class="num">Bogotá</div><div class="lbl">Entregas locales</div></div><div class="hero-stat"><div class="num">5–7 días</div><div class="lbl">Tiempo de entrega</div></div></div>
+    </div>
+    <img src="img/linea-blusa-pegada-5000-01-8eaktn.jpg" alt="" class="hero-img"></div>
+  <div class="hero-scroll"><div></div></div>
+</header>
+
+<section class="banner-sec">
+  <div class="banner-glow"></div>
+  <div class="banner-content">
+    <div class="sec-label">Estética y utilidad</div>
+    <h2>Lo esencial, <em>contigo.</em></h2>
+    <p>Reinterpretamos prendas de archivo para llevar teléfono, dinero, tarjetas, maquillaje y llaves sin depender de un bolso. RELIQUE está en etapa de desarrollo; este catálogo es un prototipo académico.</p>
+    <div class="banner-chips"><span class="chip">Bolsillos ocultos</span><span class="chip">Diseño reinterpretado</span><span class="chip">Entregas en Bogotá</span><span class="chip">Atención personalizada</span></div>
+  </div>
+</section>
+
+<div class="filtros-wrap" id="filtros-bar">
+  <div class="busqueda-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
+    <input type="text" id="buscador" placeholder="Buscar producto..." oninput="filtrarBusqueda()">
+  </div>
+</div>
+<section class="catalogo-wrap" id="catalogo">
+  <div class="catalogo-header">
+    <div><div class="sec-label">El archivo RELIQUE</div><div class="sec-title">Explora las prendas</div></div>
+    <div class="catalogo-count" id="cont-count"></div>
+  </div>
+  <div id="productos"></div>
+</section>
+
+<section class="beneficios-sec" id="beneficios">
+  <div class="sec-centro"><div class="sec-label">Nuestra propuesta</div><div class="sec-title">Diseño que te acompaña</div></div>
+  <div class="beneficios-grid">
+    <div class="bcard"><div class="bcard-icono">◈</div><h3>Diseño funcional</h3><p>Bolsillos estratégicos para llevar tus objetos personales sin depender de un bolso.</p></div><div class="bcard"><div class="bcard-icono">✂</div><h3>Rediseño creativo</h3><p>Reinterpretamos prendas de archivo para unir una propuesta estética con utilidad cotidiana.</p></div><div class="bcard"><div class="bcard-icono">◇</div><h3>Identidad diferencial</h3><p>Una combinación de diseño y función que distingue las prendas de las opciones convencionales.</p></div><div class="bcard"><div class="bcard-icono">🧵</div><h3>Confección cuidadosa</h3><p>Atención a la selección y al uso de las telas en el desarrollo de cada prenda.</p></div>
+  </div>
+</section>
+
+<section class="recs-sec">
+  <div class="sec-label">Selección del archivo</div>
+  <div class="sec-title">Prendas para descubrir</div>
+  <div class="recs-grid" id="recomendados"></div>
+</section>
+
+<section class="top-sec">
+  <div class="sec-label">Las favoritas de la comunidad</div>
+  <div class="sec-title">El archivo más votado</div>
+  <div class="top-grid" id="top"></div>
+</section>
+
+<section class="duelo-sec">
+  <div class="sec-label">Tu mirada cuenta</div>
+  <div class="sec-title">¿Qué prenda prefieres?</div>
+  <div class="duelo-arena" id="duelo"></div>
+  <p class="duelo-info">Elige tu favorita y ayúdala a subir en el ranking. Los votos no representan ventas.</p>
+</section>
+
+<section class="horarios-sec">
+  <div class="sec-label">Hablemos de tu próxima prenda</div>
+  <div class="sec-title">Horario de atención</div>
+  <ul class="horarios-lista"><li>🕒 [object Object]</li></ul>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-marca"><h3>RELIQUE</h3><p>RELIQUE · Prendas de archivo reinterpretadas con diseño funcional. Bogotá, Colombia. Marca en desarrollo · Prototipo académico.</p></div>
+    <div class="footer-col"><h4>Contacto</h4><ul><li><a href="https://wa.me/573042437862" target="_blank" rel="noopener">WhatsApp: +57 3042437862</a></li><li><a href="https://instagram.com/RELIQUE" target="_blank" rel="noopener">Instagram: @RELIQUE</a></li><li>📍 Bogotá, Colombia</li></ul></div>
+    <div class="footer-col"><h4>Pagos</h4><ul><li>Nequi</li><li>Daviplata</li><li>Transferencia bancaria</li><li>Contraentrega</li></ul></div>
+    <div class="footer-col"><h4>Categorías</h4><ul><li>Blusas</li><li>Jeans</li><li>Chaquetas</li><li>Faldas</li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 RELIQUE — Todos los derechos reservados</span>
+    <span>Archivo reinterpretado. Bolsillos ocultos. Libertad de movimiento.</span>
+  </div>
+  <div class="footer-credito">
+    Creada con <strong>Harvys</strong> · Prof. Harvey Sanabria ·
+    <a href="https://wa.me/573103323843?text=Hola%20Profesor%20Harvey%2C%20vi%20una%20tienda%20creada%20con%20Harvys%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">WhatsApp 310 332 3843</a>
+  </div>
+</footer>
+
+<!-- Copia del proyecto para volver a abrirlo en Harvys (botón "Abrir"). No la borres. -->
+<script type="application/json" id="harvys-proyecto">{"negocio":{"nombre":"RELIQUE","descripcion":"Prendas de archivo reinterpretadas, inspiradas en piezas icónicas de la moda, con bolsillos ocultos y ergonómicos para llevar tus objetos personales sin depender de un bolso. Marca en etapa de desarrollo.","eslogan":"[POR COMPLETAR]","ciudad":"Bogotá, Colombia","cobertura":"Entregas únicamente en Bogotá, entre 5 y 7 días. Domicilio con costo a cargo del cliente o encuentro coordinado en estaciones de TransMilenio. Sin envíos nacionales por el momento.","whatsapp":"573042437862","instagram":"RELIQUE","facebook":"","tiktok":"","horarios":["[object Object]"],"logo":""},"tema":{"nombreEstilo":"Archivo editorial","modo":"claro","colores":{"primario":"#484541","textoSobrePrimario":"#FFFFFF","fondo":"#F4F0E9","fondoAlterno":"#E6DED2","tarjeta":"#FFFCF7","texto":"#292724","textoSuave":"#625D56","acento":"#78634F"},"fuentes":{"titulos":"Cormorant Garamond","cuerpo":"Lato"},"titulosMayusculas":false,"radio":4,"animaciones":"baja","fondoEfecto":"ninguno","hero":"dividido","tarjetas":"planas"},"textos":{"heroEtiqueta":"RELIQUE · Archivo reinterpretado","heroTitulo":"Diseño con historia.","heroTituloResaltado":"Función para hoy.","heroSubtitulo":"Prendas inspiradas en piezas icónicas, reinterpretadas con bolsillos ocultos y ergonómicos. Conoce nuestra propuesta en desarrollo.","heroBoton":"Explorar las prendas","heroImagen":"","estadisticas":[{"valor":"{productos}","etiqueta":"Prendas en el catálogo"},{"valor":"Bogotá","etiqueta":"Entregas locales"},{"valor":"5–7 días","etiqueta":"Tiempo de entrega"}],"bannerEtiqueta":"Estética y utilidad","bannerTitulo":"Lo esencial,","bannerTituloResaltado":"contigo.","bannerTexto":"Reinterpretamos prendas de archivo para llevar teléfono, dinero, tarjetas, maquillaje y llaves sin depender de un bolso. RELIQUE está en etapa de desarrollo; este catálogo es un prototipo académico.","chips":["Bolsillos ocultos","Diseño reinterpretado","Entregas en Bogotá","Atención personalizada"],"catalogoEtiqueta":"El archivo RELIQUE","catalogoTitulo":"Explora las prendas","botonAgregar":"+ Añadir al carrito","beneficiosEtiqueta":"Nuestra propuesta","beneficiosTitulo":"Diseño que te acompaña","recomendadosEtiqueta":"Selección del archivo","recomendadosTitulo":"Prendas para descubrir","topEtiqueta":"Las favoritas de la comunidad","topTitulo":"El archivo más votado","dueloEtiqueta":"Tu mirada cuenta","dueloTitulo":"¿Qué prenda prefieres?","dueloInfo":"Elige tu favorita y ayúdala a subir en el ranking. Los votos no representan ventas.","testimoniosEtiqueta":"Experiencias RELIQUE","testimoniosTitulo":"Voces de nuestra comunidad","horariosEtiqueta":"Hablemos de tu próxima prenda","horariosTitulo":"Horario de atención","footerTexto":"RELIQUE · Prendas de archivo reinterpretadas con diseño funcional. Bogotá, Colombia. Marca en desarrollo · Prototipo académico.","footerFrase":"Archivo reinterpretado. Bolsillos ocultos. Libertad de movimiento.","carritoTitulo":"Tu selección RELIQUE","botonPagar":"Consultar pedido por WhatsApp"},"productos":[{"id":"relique-5000-01","nombre":"Línea blusa pegada · 5000-01","precio":180000,"categoria":"Blusas","imagen":"foto:8eaktn","opciones":{"etiqueta":"Talla","valores":["S","M","L"]},"destacado":true},{"id":"relique-striped-low-waist","nombre":"Striped Low Waist","precio":250000,"categoria":"Jeans","imagen":"foto:pg3b1r","opciones":{"etiqueta":"Talla","valores":["S","M","L"]},"destacado":false},{"id":"relique-dual-crop","nombre":"Chaqueta Dual Crop","precio":250000,"categoria":"Chaquetas","imagen":"foto:l4az3c","opciones":{"etiqueta":"Talla","valores":["S","M","L"]},"destacado":true},{"id":"relique-blusa-chaleco","nombre":"Corsetero Black Night","precio":250000,"categoria":"Blusas","imagen":"foto:2wuege","opciones":{"etiqueta":"Talla","valores":["S","M","L"]},"destacado":false},{"id":"relique-minifalda","nombre":"Minifalda con abotonadura doble","precio":180000,"categoria":"Faldas","imagen":"foto:oiaqud","opciones":{"etiqueta":"Talla","valores":["S","M","L"]},"destacado":false},{"id":"relique-boxy-crop-black","nombre":"Chaqueta Boxy Fit Crop Black","precio":250000,"categoria":"Chaquetas","imagen":"foto:xunf4q","opciones":{"etiqueta":"Talla","valores":["S","M","L"]},"destacado":true}],"beneficios":[{"icono":"◈","titulo":"Diseño funcional","texto":"Bolsillos estratégicos para llevar tus objetos personales sin depender de un bolso."},{"icono":"✂","titulo":"Rediseño creativo","texto":"Reinterpretamos prendas de archivo para unir una propuesta estética con utilidad cotidiana."},{"icono":"◇","titulo":"Identidad diferencial","texto":"Una combinación de diseño y función que distingue las prendas de las opciones convencionales."},{"icono":"🧵","titulo":"Confección cuidadosa","texto":"Atención a la selección y al uso de las telas en el desarrollo de cada prenda."}],"testimonios":[],"pagos":{"metodos":[{"nombre":"Nequi","icono":"💜","tipo":"transferencia"},{"nombre":"Daviplata","icono":"🔴","tipo":"transferencia"},{"nombre":"Transferencia bancaria","icono":"🏦","tipo":"transferencia"},{"nombre":"Contraentrega","icono":"💵","tipo":"contraentrega"}],"numeroTransferencia":"[POR COMPLETAR]","titular":"[POR COMPLETAR]","contraentregaDetalle":"Condiciones pendientes de confirmación por RELIQUE: pago al recibir en Bogotá, sujeto a coordinación, sin recargo por contraentrega. El domicilio tiene costo a cargo del cliente. Prototipo académico: no procesa pagos reales."},"backend":{"url":"https://script.google.com/macros/s/AKfycbzpWlJPsuHEhgRTAR57WCLxJ2iGfVq3Rz6yXdi9RanT19ONK4Ong-sJia-1OAqR49Hg/exec"},"asistente":{"activo":true,"nombre":"Reli","saludo":"Hola, soy Reli. Te ayudo a explorar RELIQUE y consultar prendas, entregas en Bogotá y horarios. Somos una marca en desarrollo."},"secciones":["banner","catalogo","beneficios","recomendados","top","duelo","horarios"],"personalizado":{"css":"","secciones":[]}}</script>
+<script type="application/json" id="harvys-rutas">{"relique-5000-01":"img/linea-blusa-pegada-5000-01-8eaktn.jpg","relique-striped-low-waist":"img/striped-low-waist-pg3b1r.jpg","relique-dual-crop":"img/chaqueta-dual-crop-l4az3c.jpg","relique-blusa-chaleco":"img/corsetero-black-night-2wuege.jpg","relique-minifalda":"img/minifalda-con-abotonadura-doble-oiaqud.jpg","relique-boxy-crop-black":"img/chaqueta-boxy-fit-crop-black-xunf4q.jpg"}</script>
+<script src="script.js"></script>
+</body>
+</html>
